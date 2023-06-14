@@ -2,6 +2,8 @@ package stepDefinitions;
 
 
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import org.apache.logging.log4j.LogManager;
@@ -16,6 +18,7 @@ import io.cucumber.java.en.*;
 import pageObjects.HomePage;
 import pageObjects.LoginPage;
 import pageObjects.MyAccountPage;
+import utilities.DataReader;
 
 
 public class Steps {
@@ -25,6 +28,7 @@ public class Steps {
 	LoginPage lp;
 	MyAccountPage mp;
 	
+	List<HashMap<String, String>> datamap;
 	
 	ResourceBundle rb;
 	Logger logger;
@@ -143,7 +147,73 @@ public class Steps {
 		
 		
 		logger.info("***Finished Login test***");
-	}
+	} 
+	
+	//** Login Data drive test using excel sheet
+	
+	@Then("user navigates to myAccount page by passing Email and Password with excel row {string}")
+	public void navigateToMyAccountByPassingDataFromExcel(String rows) 
+	{
+		
+		//Read the excel file using the path and getting the sheet name
+		datamap = DataReader.data(System.getProperty("user.dir") + "/testData/Opencart_Login_Test_Data.xlsx", "Logintestdata"); 
+		
+		int index = Integer.parseInt(rows)-1; //Start getting the rows from the first row
+		
+		//getting the login data from the excel file
+		String username= datamap.get(index).get("Email");
+		String pword = datamap.get(index).get("Password");
+		String expectedResult = datamap.get(index).get("Result");
+		
+		lp = new LoginPage(driver);
+		lp.enterEmail(username);
+		lp.enterPassword(pword);
+		lp.clickLoginButton();
+		
+		try
+		{
+			
+		    MyAccountPage myacc = new MyAccountPage(driver);
+		    boolean targetPage = myacc.verifyMyAccountPageExists();
+		 
+		
+		    if (expectedResult.equals("Valid")) {
+		    	
+			
+			    if (targetPage == true) {
+				MyAccountPage mp = new MyAccountPage(driver);
+				mp.clickLogoutButton();
+				Assert.assertTrue(true);
+			    }
+			    else {
+			    	
+				    Assert.assertTrue(false);
+			    }
+		    }
+		
+	     	if (expectedResult.equals("Invalid")) {
+	     	
+			
+		     	if (targetPage == true) {
+				myacc.clickLogoutButton();
+				Assert.assertTrue(false);
+		    	}
+		
+	        	else {
+	        		
+	           		Assert.assertTrue(true);
+	           		
+	         	}
+		
+	        }
+	    }
+		catch (Exception e) {
+			Assert.assertTrue(false);
+		}
+		//driver.close();
 
-
+     }
+	
 }
+  
+

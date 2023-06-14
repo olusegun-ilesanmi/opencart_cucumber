@@ -1,5 +1,6 @@
 Feature: Login with valid credentials 
 
+@Sanity
 Scenario: Successful login with valid credentials 
   Given user launches browser
   And  opens the URL "http://localhost/ocart"

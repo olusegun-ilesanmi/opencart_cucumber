@@ -3,5 +3,6 @@
 /Users/apple/Documents/Opencart_cucumber_project/src/test/java/testRunner/TestRunner.java
 /Users/apple/Documents/Opencart_cucumber_project/src/test/java/pageObjects/RegistrationPage.java
 /Users/apple/Documents/Opencart_cucumber_project/src/test/java/pageObjects/LoginPage.java
+/Users/apple/Documents/Opencart_cucumber_project/src/test/java/utilities/DataReader.java
 /Users/apple/Documents/Opencart_cucumber_project/src/test/java/stepDefinitions/Steps.java
 /Users/apple/Documents/Opencart_cucumber_project/src/test/java/pageObjects/HomePage.java
